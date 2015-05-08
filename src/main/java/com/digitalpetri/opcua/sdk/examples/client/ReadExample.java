@@ -41,7 +41,6 @@ public class ReadExample extends AbstractClientExample {
             logger.info("State={}, CurrentTime={}",
                     v0.getValue().getValue(), v1.getValue().getValue());
         });
-
     }
 
     private CompletableFuture<List<DataValue>> readServerStateAndTime() {
@@ -51,7 +50,5 @@ public class ReadExample extends AbstractClientExample {
 
         return client.readValues(0.0, TimestampsToReturn.Both, nodeIds);
     }
-
-
 
 }

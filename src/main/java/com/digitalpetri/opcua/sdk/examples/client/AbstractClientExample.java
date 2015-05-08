@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import static com.digitalpetri.opcua.stack.core.types.builtin.unsigned.Unsigned.uint;
 
-public class AbstractClientExample {
+public abstract class AbstractClientExample {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -28,6 +28,8 @@ public class AbstractClientExample {
                 .findFirst().orElseThrow(() -> new Exception("no desired endpoints returned"));
 
         logger.info("Using endpoint: {} [{}]", endpoint.getEndpointUrl(), securityPolicy);
+
+        loader.load();
 
         OpcUaClientConfig config = OpcUaClientConfig.builder()
                 .setApplicationName(LocalizedText.english("digitalpetri opc-ua client"))
