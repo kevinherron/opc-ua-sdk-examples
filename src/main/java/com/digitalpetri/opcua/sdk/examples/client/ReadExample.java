@@ -20,9 +20,7 @@ public class ReadExample extends AbstractClientExample {
 
         ReadExample example = new ReadExample(endpointUrl, securityPolicy);
 
-        Thread.sleep(5000);
-
-        example.client.disconnect();
+        example.shutdownFuture(example.client).get();
     }
 
     private final OpcUaClient client;

@@ -1,11 +1,13 @@
 package com.digitalpetri.opcua.sdk.examples.client;
 
 import java.util.Arrays;
+import java.util.concurrent.CompletableFuture;
 
 import com.digitalpetri.opcua.sdk.client.OpcUaClient;
 import com.digitalpetri.opcua.sdk.client.api.config.OpcUaClientConfig;
 import com.digitalpetri.opcua.sdk.examples.util.KeyStoreLoader;
 import com.digitalpetri.opcua.stack.client.UaTcpStackClient;
+import com.digitalpetri.opcua.stack.core.Stack;
 import com.digitalpetri.opcua.stack.core.security.SecurityPolicy;
 import com.digitalpetri.opcua.stack.core.types.builtin.LocalizedText;
 import com.digitalpetri.opcua.stack.core.types.structured.EndpointDescription;
@@ -41,6 +43,18 @@ public abstract class AbstractClientExample {
                 .build();
 
         return new OpcUaClient(config);
+    }
+
+    protected CompletableFuture<Void> shutdownFuture(OpcUaClient client) {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            client.disconnect();
+            Stack.releaseSharedResources();
+            future.complete(null);
+        }));
+
+        return future;
     }
 
 }
