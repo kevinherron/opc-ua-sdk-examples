@@ -9,11 +9,8 @@ import com.digitalpetri.opcua.stack.core.types.builtin.NodeId;
 import com.digitalpetri.opcua.stack.core.types.builtin.StatusCode;
 import com.digitalpetri.opcua.stack.core.types.builtin.Variant;
 import com.digitalpetri.opcua.stack.core.types.structured.CallMethodRequest;
-import com.digitalpetri.opcua.stack.core.types.structured.CallMethodResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static com.google.common.collect.Lists.newArrayList;
 
 public class MethodExample extends AbstractClientExample {
 
@@ -50,15 +47,14 @@ public class MethodExample extends AbstractClientExample {
         CallMethodRequest request = new CallMethodRequest(
                 objectId, methodId, new Variant[]{new Variant(input)});
 
-        return client.call(newArrayList(request)).thenCompose(response -> {
-            CallMethodResult result = response.getResults()[0];
+        return client.call(request).thenCompose(result -> {
             StatusCode statusCode = result.getStatusCode();
 
             if (statusCode.isGood()) {
                 Double value = (Double) result.getOutputArguments()[0].getValue();
                 return CompletableFuture.completedFuture(value);
             } else {
-                CompletableFuture<Double> f = new CompletableFuture<Double>();
+                CompletableFuture<Double> f = new CompletableFuture<>();
                 f.completeExceptionally(new UaException(statusCode));
                 return f;
             }
