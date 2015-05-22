@@ -3,8 +3,8 @@ package com.digitalpetri.opcua.sdk.examples.client;
 import java.util.List;
 
 import com.digitalpetri.opcua.sdk.client.OpcUaClient;
-import com.digitalpetri.opcua.sdk.client.subscriptions.OpcUaMonitoredItem;
-import com.digitalpetri.opcua.sdk.client.subscriptions.OpcUaSubscription;
+import com.digitalpetri.opcua.sdk.client.api.subscriptions.UaMonitoredItem;
+import com.digitalpetri.opcua.sdk.client.api.subscriptions.UaSubscription;
 import com.digitalpetri.opcua.sdk.core.AttributeId;
 import com.digitalpetri.opcua.stack.core.Identifiers;
 import com.digitalpetri.opcua.stack.core.security.SecurityPolicy;
@@ -39,7 +39,7 @@ public class SubscriptionExample extends AbstractClientExample {
         client.connect().get();
 
         // create a subscription and a monitored item
-        OpcUaSubscription subscription = client.getSubscriptionManager().createSubscription(1000.0).get();
+        UaSubscription subscription = client.getSubscriptionManager().createSubscription(1000.0).get();
 
         ReadValueId readValueId = new ReadValueId(
                 Identifiers.Server_ServerStatus_CurrentTime,
@@ -55,11 +55,11 @@ public class SubscriptionExample extends AbstractClientExample {
         MonitoredItemCreateRequest request = new MonitoredItemCreateRequest(
                 readValueId, MonitoringMode.Reporting, parameters);
 
-        List<OpcUaMonitoredItem> items = subscription
+        List<UaMonitoredItem> items = subscription
                 .createMonitoredItems(TimestampsToReturn.Both, newArrayList(request)).get();
 
         // do something with the value updates
-        OpcUaMonitoredItem item = items.get(0);
+        UaMonitoredItem item = items.get(0);
 
         item.setValueConsumer(this::onValueReceived);
     }
