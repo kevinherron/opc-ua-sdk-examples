@@ -8,6 +8,7 @@ import com.digitalpetri.opcua.stack.core.Identifiers;
 import com.digitalpetri.opcua.stack.core.security.SecurityPolicy;
 import com.digitalpetri.opcua.stack.core.types.builtin.DataValue;
 import com.digitalpetri.opcua.stack.core.types.builtin.NodeId;
+import com.digitalpetri.opcua.stack.core.types.enumerated.ServerState;
 import com.digitalpetri.opcua.stack.core.types.enumerated.TimestampsToReturn;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -36,8 +37,8 @@ public class ReadExample extends AbstractClientExample {
             DataValue v0 = values.get(0);
             DataValue v1 = values.get(1);
 
-            logger.info("State={}, CurrentTime={}",
-                    v0.getValue().getValue(), v1.getValue().getValue());
+            logger.info("State={}", ServerState.from((Integer) v0.getValue().getValue()));
+            logger.info("CurrentTime={}", v1.getValue().getValue());
         });
     }
 

@@ -12,18 +12,18 @@
     <dependencies>
         <dependency>
             <groupId>com.digitalpetri.opcua</groupId>
-            <artifactId>sdk-client</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
+            <artifactId>ua-client</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.digitalpetri.opcua</groupId>
-            <artifactId>sdk-server</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
+            <artifactId>ua-server</artifactId>
+            <version>0.4.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.digitalpetri.opcua</groupId>
             <artifactId>ctt-namespace</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
+            <version>0.4.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
