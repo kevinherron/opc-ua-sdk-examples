@@ -9,25 +9,26 @@ import com.digitalpetri.opcua.stack.core.types.builtin.DataValue;
 import com.digitalpetri.opcua.stack.core.types.builtin.NodeId;
 import com.digitalpetri.opcua.stack.core.types.builtin.StatusCode;
 import com.digitalpetri.opcua.stack.core.types.builtin.Variant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.google.common.collect.Lists.newArrayList;
 
-public class WriteExample extends AbstractClientExample {
+public class WriteExample implements ClientExample {
 
     public static void main(String[] args) throws Exception {
         String endpointUrl = "opc.tcp://localhost:12685/digitalpetri";
         SecurityPolicy securityPolicy = SecurityPolicy.None;
 
-        WriteExample example = new WriteExample(endpointUrl, securityPolicy);
+        WriteExample example = new WriteExample();
 
-        example.shutdownFuture(example.client).get();
+        new ClientExampleRunner(endpointUrl, securityPolicy, example).run();
     }
 
-    private final OpcUaClient client;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public WriteExample(String endpointUrl, SecurityPolicy securityPolicy) throws Exception {
-        client = createClient(endpointUrl, securityPolicy);
-
+    @Override
+    public void run(OpcUaClient client, CompletableFuture<OpcUaClient> future) throws Exception {
         // synchronous connect
         client.connect().get();
 
@@ -38,17 +39,19 @@ public class WriteExample extends AbstractClientExample {
             Variant v = new Variant(i);
 
             // write asynchronously....
-            CompletableFuture<List<StatusCode>> future =
+            CompletableFuture<List<StatusCode>> f =
                     client.writeValues(nodeIds, newArrayList(new DataValue(v)));
 
             // ...but block for the results so we write in order
-            List<StatusCode> statusCodes = future.get();
+            List<StatusCode> statusCodes = f.get();
             StatusCode status = statusCodes.get(0);
 
             if (status.isGood()) {
                 logger.info("Wrote '{}' to nodeId={}", v, nodeIds.get(0));
             }
         }
+
+        future.complete(client);
     }
 
 }

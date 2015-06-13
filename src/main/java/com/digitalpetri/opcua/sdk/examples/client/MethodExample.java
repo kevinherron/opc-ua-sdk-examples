@@ -12,35 +12,36 @@ import com.digitalpetri.opcua.stack.core.types.structured.CallMethodRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MethodExample extends AbstractClientExample {
+public class MethodExample implements ClientExample {
 
     public static void main(String[] args) throws Exception {
         String endpointUrl = "opc.tcp://localhost:12685/digitalpetri";
         SecurityPolicy securityPolicy = SecurityPolicy.None;
 
-        MethodExample example = new MethodExample(endpointUrl, securityPolicy);
+        MethodExample example = new MethodExample();
 
-        example.shutdownFuture(example.client).get();
+        new ClientExampleRunner(endpointUrl, securityPolicy, example).run();
     }
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final OpcUaClient client;
-
-    public MethodExample(String endpointUrl, SecurityPolicy securityPolicy) throws Exception {
-        client = createClient(endpointUrl, securityPolicy);
-
+    @Override
+    public void run(OpcUaClient client, CompletableFuture<OpcUaClient> future) throws Exception {
         // synchronous connect
         client.connect().get();
 
         // call the sqrt(x) function provided by CttNamespace
-        sqrt(16.0).exceptionally(ex -> {
+        sqrt(client, 16.0).exceptionally(ex -> {
             logger.error("error invoking sqrt()", ex);
             return -1.0;
-        }).thenAccept(v -> logger.info("sqrt(16)={}", v));
+        }).thenAccept(v -> {
+            logger.info("sqrt(16)={}", v);
+
+            future.complete(client);
+        });
     }
 
-    private CompletableFuture<Double> sqrt(Double input) {
+    private CompletableFuture<Double> sqrt(OpcUaClient client, Double input) {
         NodeId objectId = NodeId.parse("ns=2;s=/Methods");
         NodeId methodId = NodeId.parse("ns=2;s=/Methods/sqrt(x)");
 

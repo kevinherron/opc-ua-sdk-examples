@@ -1,6 +1,7 @@
 package com.digitalpetri.opcua.sdk.examples.client;
 
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 import com.digitalpetri.opcua.sdk.client.OpcUaClient;
 import com.digitalpetri.opcua.sdk.client.api.nodes.attached.UaVariableNode;
@@ -9,23 +10,24 @@ import com.digitalpetri.opcua.stack.core.types.builtin.DataValue;
 import com.digitalpetri.opcua.stack.core.types.builtin.NodeId;
 import com.digitalpetri.opcua.stack.core.types.builtin.StatusCode;
 import com.digitalpetri.opcua.stack.core.types.builtin.Variant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class WriteNodeExample extends AbstractClientExample {
+public class WriteNodeExample implements ClientExample {
 
     public static void main(String[] args) throws Exception {
         String endpointUrl = "opc.tcp://localhost:12685/digitalpetri";
         SecurityPolicy securityPolicy = SecurityPolicy.None;
 
-        WriteNodeExample example = new WriteNodeExample(endpointUrl, securityPolicy);
+        WriteNodeExample example = new WriteNodeExample();
 
-        example.shutdownFuture(example.client).get();
+        new ClientExampleRunner(endpointUrl, securityPolicy, example).run();
     }
 
-    private final OpcUaClient client;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public WriteNodeExample(String endpointUrl, SecurityPolicy securityPolicy) throws Exception {
-        client = createClient(endpointUrl, securityPolicy);
-
+    @Override
+    public void run(OpcUaClient client, CompletableFuture<OpcUaClient> future) throws Exception {
         // synchronous connect
         client.connect().get();
 
@@ -45,6 +47,8 @@ public class WriteNodeExample extends AbstractClientExample {
         // read the value again
         Object valueAfter = variableNode.readValueAttribute().get();
         logger.info("valueAfter={}", valueAfter);
-    }
 
+        future.complete(client);
+    }
+    
 }
