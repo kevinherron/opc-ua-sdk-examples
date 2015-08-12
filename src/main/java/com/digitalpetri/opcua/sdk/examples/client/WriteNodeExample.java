@@ -39,8 +39,8 @@ public class WriteNodeExample implements ClientExample {
         Object valueBefore = variableNode.readValueAttribute().get();
         logger.info("valueBefore={}", valueBefore);
 
-        // write a new random value
-        DataValue newValue = new DataValue(new Variant(new Random().nextInt()));
+        // write a new random value (status and timestamps not included)
+        DataValue newValue = new DataValue(new Variant(new Random().nextInt()), null, null);
         StatusCode writeStatus = variableNode.writeValue(newValue).get();
         logger.info("writeStatus={}", writeStatus);
 

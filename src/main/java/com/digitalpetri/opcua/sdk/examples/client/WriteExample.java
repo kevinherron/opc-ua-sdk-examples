@@ -38,9 +38,12 @@ public class WriteExample implements ClientExample {
         for (int i = 0; i < 10; i++) {
             Variant v = new Variant(i);
 
+            // don't write status or timestamps
+            DataValue dv = new DataValue(v, null, null);
+
             // write asynchronously....
             CompletableFuture<List<StatusCode>> f =
-                    client.writeValues(nodeIds, newArrayList(new DataValue(v)));
+                    client.writeValues(nodeIds, newArrayList(dv));
 
             // ...but block for the results so we write in order
             List<StatusCode> statusCodes = f.get();
