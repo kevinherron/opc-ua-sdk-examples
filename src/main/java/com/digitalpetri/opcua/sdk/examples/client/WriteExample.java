@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import com.digitalpetri.opcua.sdk.client.OpcUaClient;
-import com.digitalpetri.opcua.stack.core.security.SecurityPolicy;
 import com.digitalpetri.opcua.stack.core.types.builtin.DataValue;
 import com.digitalpetri.opcua.stack.core.types.builtin.NodeId;
 import com.digitalpetri.opcua.stack.core.types.builtin.StatusCode;
@@ -18,11 +17,10 @@ public class WriteExample implements ClientExample {
 
     public static void main(String[] args) throws Exception {
         String endpointUrl = "opc.tcp://localhost:12685/digitalpetri";
-        SecurityPolicy securityPolicy = SecurityPolicy.None;
 
         WriteExample example = new WriteExample();
 
-        new ClientExampleRunner(endpointUrl, securityPolicy, example).run();
+        new ClientExampleRunner(endpointUrl, example).run();
     }
 
     private final Logger logger = LoggerFactory.getLogger(getClass());

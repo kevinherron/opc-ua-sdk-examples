@@ -28,19 +28,20 @@ public class ClientExampleRunner {
     private final KeyStoreLoader loader = new KeyStoreLoader();
 
     private final String endpointUrl;
-    private final SecurityPolicy securityPolicy;
     private final ClientExample clientExample;
 
     public ClientExampleRunner(String endpointUrl,
-                               SecurityPolicy securityPolicy,
                                ClientExample clientExample) {
 
         this.endpointUrl = endpointUrl;
-        this.securityPolicy = securityPolicy;
         this.clientExample = clientExample;
+
+
     }
 
     private OpcUaClient createClient() throws Exception {
+        SecurityPolicy securityPolicy = clientExample.getSecurityPolicy();
+
         EndpointDescription[] endpoints = UaTcpStackClient.getEndpoints(endpointUrl).get();
 
         EndpointDescription endpoint = Arrays.stream(endpoints)
@@ -57,6 +58,7 @@ public class ClientExampleRunner {
                 .setCertificate(loader.getClientCertificate())
                 .setKeyPair(loader.getClientKeyPair())
                 .setEndpoint(endpoint)
+                .setIdentityProvider(clientExample.getIdentityProvider())
                 .setRequestTimeout(uint(5000))
                 .build();
 

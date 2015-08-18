@@ -5,7 +5,6 @@ import java.util.concurrent.CompletableFuture;
 
 import com.digitalpetri.opcua.sdk.client.OpcUaClient;
 import com.digitalpetri.opcua.sdk.client.api.nodes.attached.UaVariableNode;
-import com.digitalpetri.opcua.stack.core.security.SecurityPolicy;
 import com.digitalpetri.opcua.stack.core.types.builtin.DataValue;
 import com.digitalpetri.opcua.stack.core.types.builtin.NodeId;
 import com.digitalpetri.opcua.stack.core.types.builtin.StatusCode;
@@ -17,11 +16,10 @@ public class WriteNodeExample implements ClientExample {
 
     public static void main(String[] args) throws Exception {
         String endpointUrl = "opc.tcp://localhost:12685/digitalpetri";
-        SecurityPolicy securityPolicy = SecurityPolicy.None;
 
         WriteNodeExample example = new WriteNodeExample();
 
-        new ClientExampleRunner(endpointUrl, securityPolicy, example).run();
+        new ClientExampleRunner(endpointUrl, example).run();
     }
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -50,5 +48,5 @@ public class WriteNodeExample implements ClientExample {
 
         future.complete(client);
     }
-    
+
 }

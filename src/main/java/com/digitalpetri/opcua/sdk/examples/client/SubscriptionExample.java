@@ -8,7 +8,6 @@ import com.digitalpetri.opcua.sdk.client.api.subscriptions.UaMonitoredItem;
 import com.digitalpetri.opcua.sdk.client.api.subscriptions.UaSubscription;
 import com.digitalpetri.opcua.stack.core.AttributeId;
 import com.digitalpetri.opcua.stack.core.Identifiers;
-import com.digitalpetri.opcua.stack.core.security.SecurityPolicy;
 import com.digitalpetri.opcua.stack.core.types.builtin.QualifiedName;
 import com.digitalpetri.opcua.stack.core.types.enumerated.MonitoringMode;
 import com.digitalpetri.opcua.stack.core.types.enumerated.TimestampsToReturn;
@@ -25,11 +24,10 @@ public class SubscriptionExample implements ClientExample {
 
     public static void main(String[] args) throws Exception {
         String endpointUrl = "opc.tcp://localhost:12685/digitalpetri";
-        SecurityPolicy securityPolicy = SecurityPolicy.None;
 
         SubscriptionExample example = new SubscriptionExample();
 
-        new ClientExampleRunner(endpointUrl, securityPolicy, example).run();
+        new ClientExampleRunner(endpointUrl, example).run();
     }
 
     private final Logger logger = LoggerFactory.getLogger(getClass());

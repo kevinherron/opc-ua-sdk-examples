@@ -15,6 +15,8 @@ public class KeyStoreLoader {
 
     private X509Certificate clientCertificate;
     private KeyPair clientKeyPair;
+    private X509Certificate serverCertificate;
+    private KeyPair serverKeyPair;
 
     public KeyStoreLoader load() throws Exception {
         KeyStore keyStore = KeyStore.getInstance("PKCS12");
@@ -27,6 +29,13 @@ public class KeyStoreLoader {
             clientKeyPair = new KeyPair(clientPublicKey, (PrivateKey) clientPrivateKey);
         }
 
+        Key serverPrivateKey = keyStore.getKey(SERVER_ALIAS, PASSWORD);
+        if (serverPrivateKey instanceof PrivateKey) {
+            serverCertificate = (X509Certificate) keyStore.getCertificate(SERVER_ALIAS);
+            PublicKey serverPublicKey = serverCertificate.getPublicKey();
+            serverKeyPair = new KeyPair(serverPublicKey, (PrivateKey) serverPrivateKey);
+        }
+
         return this;
     }
 
@@ -36,6 +45,14 @@ public class KeyStoreLoader {
 
     public KeyPair getClientKeyPair() {
         return clientKeyPair;
+    }
+
+    public X509Certificate getServerCertificate() {
+        return serverCertificate;
+    }
+
+    public KeyPair getServerKeyPair() {
+        return serverKeyPair;
     }
 
 }
