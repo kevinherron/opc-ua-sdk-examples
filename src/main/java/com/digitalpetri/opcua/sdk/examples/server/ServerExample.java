@@ -1,5 +1,6 @@
 package com.digitalpetri.opcua.sdk.examples.server;
 
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -9,6 +10,8 @@ import com.digitalpetri.opcua.sdk.server.api.config.OpcUaServerConfig;
 import com.digitalpetri.opcua.sdk.server.identity.UsernameIdentityValidator;
 import com.digitalpetri.opcua.server.ctt.CttNamespace;
 import com.digitalpetri.opcua.stack.core.Stack;
+import com.digitalpetri.opcua.stack.core.application.CertificateManager;
+import com.digitalpetri.opcua.stack.core.application.DirectoryCertificateManager;
 import com.digitalpetri.opcua.stack.core.types.builtin.LocalizedText;
 import com.digitalpetri.opcua.stack.core.types.structured.UserTokenPolicy;
 
@@ -38,9 +41,13 @@ public class ServerExample {
                 OpcUaServerConfig.USER_TOKEN_POLICY_USERNAME
         );
 
+        CertificateManager certificateManager =
+                new DirectoryCertificateManager(new File("./security"));
+
         OpcUaServerConfig config = OpcUaServerConfig.builder()
                 .setApplicationName(LocalizedText.english("digitalpetri opc-ua server"))
                 .setApplicationUri("urn:digitalpetri:opcua:server")
+                .setCertificateManager(certificateManager)
                 .setIdentityValidator(identityValidator)
                 .setUserTokenPolicies(userTokenPolicies)
                 .setProductUri("urn:digitalpetri:opcua:sdk")
