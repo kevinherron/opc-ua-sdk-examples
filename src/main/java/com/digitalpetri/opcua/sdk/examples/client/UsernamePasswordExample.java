@@ -9,6 +9,7 @@ import com.digitalpetri.opcua.sdk.client.api.identity.IdentityProvider;
 import com.digitalpetri.opcua.sdk.client.api.identity.UsernameProvider;
 import com.digitalpetri.opcua.sdk.client.api.nodes.attached.UaVariableNode;
 import com.digitalpetri.opcua.stack.core.Identifiers;
+import com.digitalpetri.opcua.stack.core.security.SecurityPolicy;
 import com.digitalpetri.opcua.stack.core.types.builtin.DataValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,11 @@ public class UsernamePasswordExample implements ClientExample {
         return new CompositeProvider(
                 new UsernameProvider("user", "password"),
                 new AnonymousProvider());
+    }
+
+    @Override
+    public SecurityPolicy getSecurityPolicy() {
+        return SecurityPolicy.None;
     }
 
     @Override
