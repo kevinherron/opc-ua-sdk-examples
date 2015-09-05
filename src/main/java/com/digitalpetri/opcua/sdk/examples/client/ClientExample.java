@@ -10,7 +10,7 @@ import com.digitalpetri.opcua.stack.core.security.SecurityPolicy;
 public interface ClientExample {
 
     default SecurityPolicy getSecurityPolicy() {
-        return SecurityPolicy.None;
+        return SecurityPolicy.NONE;
     }
 
     default IdentityProvider getIdentityProvider() {

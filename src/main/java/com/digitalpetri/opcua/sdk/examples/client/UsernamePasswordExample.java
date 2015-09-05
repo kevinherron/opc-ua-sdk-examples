@@ -39,7 +39,7 @@ public class UsernamePasswordExample implements ClientExample {
 
     @Override
     public SecurityPolicy getSecurityPolicy() {
-        return SecurityPolicy.None;
+        return SecurityPolicy.NONE;
     }
 
     @Override
