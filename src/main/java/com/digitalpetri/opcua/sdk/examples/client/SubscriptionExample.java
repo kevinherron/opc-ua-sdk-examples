@@ -2,6 +2,7 @@ package com.digitalpetri.opcua.sdk.examples.client;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicLong;
 
 import com.digitalpetri.opcua.sdk.client.OpcUaClient;
 import com.digitalpetri.opcua.sdk.client.api.subscriptions.UaMonitoredItem;
@@ -9,6 +10,7 @@ import com.digitalpetri.opcua.sdk.client.api.subscriptions.UaSubscription;
 import com.digitalpetri.opcua.stack.core.AttributeId;
 import com.digitalpetri.opcua.stack.core.Identifiers;
 import com.digitalpetri.opcua.stack.core.types.builtin.QualifiedName;
+import com.digitalpetri.opcua.stack.core.types.builtin.unsigned.UInteger;
 import com.digitalpetri.opcua.stack.core.types.enumerated.MonitoringMode;
 import com.digitalpetri.opcua.stack.core.types.enumerated.TimestampsToReturn;
 import com.digitalpetri.opcua.stack.core.types.structured.MonitoredItemCreateRequest;
@@ -32,6 +34,8 @@ public class SubscriptionExample implements ClientExample {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    private final AtomicLong clientHandles = new AtomicLong(1L);
+
     @Override
     public void run(OpcUaClient client, CompletableFuture<OpcUaClient> future) throws Exception {
         // synchronous connect
@@ -44,10 +48,13 @@ public class SubscriptionExample implements ClientExample {
                 Identifiers.Server_ServerStatus_CurrentTime,
                 AttributeId.VALUE.uid(), null, QualifiedName.NULL_VALUE);
 
+        // client handle must be unique per item
+        UInteger clientHandle = uint(clientHandles.getAndIncrement());
+
         MonitoringParameters parameters = new MonitoringParameters(
-                uint(1),    // client handle
+                clientHandle,
                 1000.0,     // sampling interval
-                null,       // no (default) filter
+                null,       // filter, null means use default
                 uint(10),   // queue size
                 true);      // discard oldest
 
