@@ -25,7 +25,7 @@ import static com.google.common.collect.Lists.newArrayList;
 public class SubscriptionExample implements ClientExample {
 
     public static void main(String[] args) throws Exception {
-        String endpointUrl = "opc.tcp://localhost:12685/digitalpetri";
+        String endpointUrl = "opc.tcp://localhost:12685";
 
         SubscriptionExample example = new SubscriptionExample();
 

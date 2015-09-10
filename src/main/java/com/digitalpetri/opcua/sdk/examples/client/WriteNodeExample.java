@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 public class WriteNodeExample implements ClientExample {
 
     public static void main(String[] args) throws Exception {
-        String endpointUrl = "opc.tcp://localhost:12685/digitalpetri";
+        String endpointUrl = "opc.tcp://localhost:12685";
 
         WriteNodeExample example = new WriteNodeExample();
 

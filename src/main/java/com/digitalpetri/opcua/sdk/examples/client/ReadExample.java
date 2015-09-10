@@ -17,7 +17,7 @@ import static com.google.common.collect.Lists.newArrayList;
 public class ReadExample implements ClientExample {
 
     public static void main(String[] args) throws Exception {
-        String endpointUrl = "opc.tcp://localhost:12685/digitalpetri";
+        String endpointUrl = "opc.tcp://localhost:12685";
 
         ReadExample example = new ReadExample();
 
