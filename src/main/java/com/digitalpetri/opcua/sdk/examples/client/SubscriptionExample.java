@@ -46,7 +46,7 @@ public class SubscriptionExample implements ClientExample {
 
         ReadValueId readValueId = new ReadValueId(
                 Identifiers.Server_ServerStatus_CurrentTime,
-                AttributeId.VALUE.uid(), null, QualifiedName.NULL_VALUE);
+                AttributeId.Value.uid(), null, QualifiedName.NULL_VALUE);
 
         // client handle must be unique per item
         UInteger clientHandle = uint(clientHandles.getAndIncrement());
