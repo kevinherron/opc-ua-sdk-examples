@@ -51,7 +51,7 @@ public class ServerExample {
                 .setIdentityValidator(identityValidator)
                 .setUserTokenPolicies(userTokenPolicies)
                 .setProductUri("urn:digitalpetri:opcua:sdk")
-                .setServerName("digitalpetri")
+                .setServerName("")
                 .build();
 
         server = new OpcUaServer(config);
