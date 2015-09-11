@@ -11,7 +11,9 @@ import com.digitalpetri.opcua.sdk.server.identity.UsernameIdentityValidator;
 import com.digitalpetri.opcua.server.ctt.CttNamespace;
 import com.digitalpetri.opcua.stack.core.Stack;
 import com.digitalpetri.opcua.stack.core.application.CertificateManager;
-import com.digitalpetri.opcua.stack.core.application.DirectoryCertificateManager;
+import com.digitalpetri.opcua.stack.core.application.CertificateValidator;
+import com.digitalpetri.opcua.stack.core.application.DefaultCertificateManager;
+import com.digitalpetri.opcua.stack.core.application.DefaultCertificateValidator;
 import com.digitalpetri.opcua.stack.core.types.builtin.LocalizedText;
 import com.digitalpetri.opcua.stack.core.types.structured.UserTokenPolicy;
 
@@ -41,13 +43,14 @@ public class ServerExample {
                 OpcUaServerConfig.USER_TOKEN_POLICY_USERNAME
         );
 
-        CertificateManager certificateManager =
-                new DirectoryCertificateManager(new File("./security"));
+        CertificateManager certificateManager = new DefaultCertificateManager();
+        CertificateValidator certificateValidator = new DefaultCertificateValidator(new File("./security"));
 
         OpcUaServerConfig config = OpcUaServerConfig.builder()
                 .setApplicationName(LocalizedText.english("digitalpetri opc-ua server"))
                 .setApplicationUri("urn:digitalpetri:opcua:server")
                 .setCertificateManager(certificateManager)
+                .setCertificateValidator(certificateValidator)
                 .setIdentityValidator(identityValidator)
                 .setUserTokenPolicies(userTokenPolicies)
                 .setProductUri("urn:digitalpetri:opcua:sdk")
