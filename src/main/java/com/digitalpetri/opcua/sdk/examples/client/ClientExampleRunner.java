@@ -2,9 +2,7 @@ package com.digitalpetri.opcua.sdk.examples.client;
 
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import com.digitalpetri.opcua.sdk.client.OpcUaClient;
 import com.digitalpetri.opcua.sdk.client.api.config.OpcUaClientConfig;
@@ -66,19 +64,21 @@ public class ClientExampleRunner {
     }
 
     public void run() {
-        future.whenComplete((c, ex) -> {
-            if (c != null) {
-                try {
-                    c.disconnect().get(1, TimeUnit.SECONDS);
-                } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                    logger.error("Error waiting for disconnect: {}", e.getMessage(), e);
-                }
+        future.whenComplete((client, ex) -> {
+            if (client != null) {
+                client.disconnect().whenComplete(
+                        (c, t) -> Stack.releaseSharedResources());
             } else {
                 logger.error("Error running example: {}", ex.getMessage(), ex);
+                Stack.releaseSharedResources();
             }
 
-            Stack.releaseSharedResources();
-            System.exit(0);
+            try {
+                Thread.sleep(1000);
+                System.exit(0);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         });
 
         try {
